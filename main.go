@@ -17,6 +17,8 @@ import (
 
 const (
 	version = "0.0.0"
+	gametick = time.Second / 3
+	framerate = time.Second / 60
 )
 
 var (
@@ -36,7 +38,7 @@ func init() {
 }
 
 func main() {
-	state := gamestate.State{}
+	state := gamestate.NewState()
 
 	// Set up gui. As the server is not meant to host a player, this is somewhat
 	// unneeded, but it helps debugging to see the actual state of the world.
@@ -51,11 +53,19 @@ func main() {
 	keyboardHandler, callback := keyboard.NewHandler()
 	gui.SetKeyCallback(callback)
 
-	ticker := time.NewTicker(time.Second / 6) // / 60)
+	ticker := time.NewTicker(framerate)
+	blockFallTicker := time.NewTicker(gametick)
 	for !gui.ShouldClose() {
 		// Read input
 		keyboardHandler.Update()
-		state.Step()
+		state.ApplyInputs(keyboardHandler)
+		select {
+		case _, ok := <-blockFallTicker.C: // a new block falls every gametick
+			if ok {
+				state.Step()
+			}
+		default:
+		}
 
 		draw.BeginDraw()
 		w, h := gui.GetSize()
