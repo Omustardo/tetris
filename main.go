@@ -3,7 +3,6 @@ package main
 // TODO: Improve logging: https://www.goinggo.net/2013/11/using-log-package-in-go.html
 
 import (
-	"flag"
 	"log"
 	"runtime"
 	"time"
@@ -16,22 +15,11 @@ import (
 )
 
 const (
-	version = "0.0.0"
 	gametick = time.Second / 3
 	framerate = time.Second / 60
 )
 
-var (
-// Flags
-// udpPort int // port to listen at
-)
-
 func init() {
-	//flag.IntVar(&udpPort, "udp_port", 3000, "UDP port to listen at.")
-	flag.Parse()
-	//log.Println("Server-Specific Command Line flags set:")
-	//log.Println("\t Listening at port", udpPort)
-
 	// OpenGl needs to run on one thread, evidently.
 	// https://github.com/go-gl/gl/issues/13
 	runtime.LockOSThread()
