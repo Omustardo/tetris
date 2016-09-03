@@ -1,3 +1,8 @@
+// Tetronimoes are 4 blocks stuck together in different ways.
+// They are represented as a square 2d bool array with a color. They also have
+// an origin point, but that only is used when they are placed in a
+// gamestate.State and should really be refactored to be part of State instead.
+// Using a square 2d array makes rotation relatively easy.
 package tetronimoes
 
 import "math/rand"
@@ -11,7 +16,6 @@ type Shape struct {
 	points     [][]bool // All points that make up this shape.
 	origin     Point    // Used as origin for all of the other points. Should be set based on the parent board.
 }
-
 
 // Rotate 90 degrees:
 // Transpose
@@ -82,10 +86,11 @@ func NewJShape() *Shape {
 // #
 func NewLineShape() *Shape {
   points := [][]bool{
-    {false, true, false, false}, // bottom
-    {false, true, false, false}, // middle1
-    {false, true, false, false}, // middle2
-    {false, true, false, false}, // top
+    {false, false, true, false, false}, // bottom
+    {false, false, true, false, false}, //
+    {false, false, true, false, false}, // middle
+    {false, false, true, false, false}, //
+    {false, false, false, false, false}, // top
   }
   return &Shape{
     R: 1, G: 0.2, B: 0, A: 1,

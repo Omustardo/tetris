@@ -1,4 +1,12 @@
-// Holds all objects in the game world
+// Holds all objects in the game world.
+//
+// The game state is represented as a 2d array of blocks, where a block is
+// just a struct containing RGBA values. The game state also holds a reference
+// to the piece which is currently falling.
+// Every game tick the player's input is applied and the block moves down one.
+// If it would intersect with existing blocks, it instead doesn't move down but
+// becomes part of the 2d array of blocks. If there's no falling piece then
+// a new one is randomly chosen and placed at the top.
 package gamestate
 
 import (
@@ -117,7 +125,7 @@ func (s *State) Step() {
 	if s.fallingPiece == nil {
 		s.fallingPiece = tetronimoes.NewRandomShape()
 		origin := s.fallingPiece.Origin()
-		// origin.X = float32(len(s.board)) / 2 // Start at left side for now
+		origin.X = float32((Width / 2) - len(s.fallingPiece.Points())/2)
 		origin.Y = float32(len(s.board) - len(s.fallingPiece.Points()[0]))
 	}
 
@@ -130,9 +138,6 @@ func (s *State) Step() {
 		s.AddToBoard(s.fallingPiece)
 		s.fallingPiece = nil
 	}
-
-	// TODO: Check for full rows and clear them
-
 }
 
 // Draw the game state assuming the origin is at (x,y) and has (width,height).

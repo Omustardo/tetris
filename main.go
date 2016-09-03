@@ -28,8 +28,6 @@ func init() {
 func main() {
 	state := gamestate.NewState()
 
-	// Set up gui. As the server is not meant to host a player, this is somewhat
-	// unneeded, but it helps debugging to see the actual state of the world.
 	gui, err := window.Initialize("Tetris", 500, 1000, false)
 	if err != nil {
 		log.Fatalln(err)
