@@ -8,14 +8,14 @@ import (
 	"time"
 
 	"github.com/go-gl/glfw/v3.1/glfw"
-	"github.com/omustardo/tetris/gamestate"
+	"github.com/omustardo/tetris/glfw-tetris/gamestate"
 	"github.com/omustardo/window"
 	"github.com/omustardo/window/draw"
 	"github.com/omustardo/window/keyboard"
 )
 
 const (
-	gametick = time.Second / 3
+	gametick  = time.Second / 3
 	framerate = time.Second / 60
 )
 
@@ -56,11 +56,6 @@ func main() {
 		draw.BeginDraw()
 		w, h := gui.GetSize()
 		state.Draw(0, 0, float32(w), float32(h))
-
-		// Quick debugging
-		if keyboardHandler.SpacePressed() {
-			log.Println("Pressing Space")
-		}
 
 		gui.SwapBuffers()
 		glfw.PollEvents()

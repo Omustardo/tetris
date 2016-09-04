@@ -19,13 +19,13 @@ and my little wrapper for glfw:
 
 and then this repo:
 
-`go get -u github.com/omustardo/tetris`
+`go get -u github.com/omustardo/tetris/glfw-tetris`
 
  
 
 run tetris with:
 
-`go run github.com/omustardo/tetris/main.go`
+`go run github.com/omustardo/tetris/glfw-tetris/main.go`
 
  
 

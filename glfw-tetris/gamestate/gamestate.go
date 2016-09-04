@@ -11,17 +11,17 @@ package gamestate
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"time"
-	"log"
 
-	"github.com/omustardo/tetris/tetronimoes"
+	"github.com/omustardo/tetris/glfw-tetris/tetronimoes"
 	"github.com/omustardo/window/draw"
 	"github.com/omustardo/window/keyboard"
 )
 
 func init() {
-	rand.Seed( time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UTC().UnixNano())
 }
 
 const (
@@ -75,14 +75,14 @@ func (s *State) ApplyInputs(keyboardHandler *keyboard.Handler) {
 		origin := s.fallingPiece.Origin()
 		origin.X--
 		if s.BoardIntersects(s.fallingPiece) {
-		  origin.X++
+			origin.X++
 		}
 	}
 	if keyboardHandler.RightPressed() && !keyboardHandler.WasRightPressed() {
 		origin := s.fallingPiece.Origin()
 		origin.X++
 		if s.BoardIntersects(s.fallingPiece) {
-		  origin.X--
+			origin.X--
 		}
 	}
 }
@@ -112,10 +112,10 @@ func (s *State) Step() {
 			s.board[i] = make([]*block, Width)
 
 			// and shift everything down
-			for j := i; j < Height - 1; j++ {
+			for j := i; j < Height-1; j++ {
 				copy(s.board[j], s.board[j+1])
 			}
-			s.board[Height - 1] = make([]*block, Width)
+			s.board[Height-1] = make([]*block, Width)
 		}
 	}
 
@@ -235,14 +235,14 @@ func (s *State) AddToBoard(shape *tetronimoes.Shape) {
 }
 
 func (s *State) Print() {
-  for row := Height - 1; row >= 0; row-- {
-  	for col := 0; col < Width; col++ {
-  		if s.board[row][col] != nil {
-  			fmt.Printf("1")
-  		} else {
-  			fmt.Printf("0")
-  		}
-  	}
-  	fmt.Println()
-  }
+	for row := Height - 1; row >= 0; row-- {
+		for col := 0; col < Width; col++ {
+			if s.board[row][col] != nil {
+				fmt.Printf("1")
+			} else {
+				fmt.Printf("0")
+			}
+		}
+		fmt.Println()
+	}
 }
