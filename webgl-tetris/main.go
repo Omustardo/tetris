@@ -52,6 +52,7 @@ func main() {
 	}
 	defer glfw.Terminate()
 	glfw.WindowHint(glfw.Samples, 8) // Anti-aliasing.
+	glfw.WindowHint(glfw.Resizable, gl.FALSE)
 
 	window, err := glfw.CreateWindow(*windowWidth, *windowHeight, "Tetris", nil, nil)
 	if err != nil {
