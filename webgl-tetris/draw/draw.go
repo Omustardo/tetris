@@ -79,7 +79,7 @@ func TriangleFilled(x1, y1, x2, y2, x3, y3, r, g, b, a float32) {
 	gl.Uniform4f(ColorUniform, r, g, b, a)            // set color
 	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:])   // set perspective
 	gl.UniformMatrix4fv(MVMatrixUniform, mvMatrix[:]) // set world transform (translate to position)
-	itemCount := len(vertices) / itemSize
+	itemCount := 3                                    // 3 points
 	gl.DrawArrays(gl.TRIANGLES, 0, itemCount)
 
 	// gl.BindBuffer(gl.ARRAY_BUFFER, gl.Buffer{Value: 0}) // Unbind buffer
