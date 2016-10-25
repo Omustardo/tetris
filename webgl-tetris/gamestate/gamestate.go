@@ -143,10 +143,7 @@ func (s *State) Step() {
 // Draw the game state assuming the origin is at (x,y) and has (width,height).
 // And (x,y) is in the upper left of the draw area.
 // Also assumes the overall board aspect ratio is 1:2
-func (s *State) Draw(x, y float32) {
-
-	width := float32(draw.WindowSize[0])
-	height := float32(draw.WindowSize[1])
+func (s *State) Draw(x, y, width, height float32) {
 	blockWidth := width / float32(Width)    // draw area over number of blocks
 	blockHeight := height / float32(Height) // draw area over number of blocks
 
@@ -158,7 +155,7 @@ func (s *State) Draw(x, y float32) {
 				x2 := float32(col+1) * blockWidth
 				y1 := height - float32(row)*blockHeight
 				y2 := height - float32(row+1)*blockHeight
-				draw.RectFilled(x1, y1, x2, y2,
+				draw.RectFilled(x+x1, y+y1, x+x2, y+y2,
 					s.board[row][col].R, s.board[row][col].G, s.board[row][col].B, s.board[row][col].A)
 			}
 		}
@@ -167,8 +164,8 @@ func (s *State) Draw(x, y float32) {
 	// Draw the falling piece.
 	if s.fallingPiece != nil {
 		fallingOrigin := s.fallingPiece.Origin()
-		x := fallingOrigin.X
-		y := fallingOrigin.Y
+		boardX := fallingOrigin.X
+		boardY := fallingOrigin.Y
 
 		r, g, b, a := s.fallingPiece.Color()
 		points := s.fallingPiece.Points()
@@ -176,13 +173,18 @@ func (s *State) Draw(x, y float32) {
 		for col := 0; col < len(points); col++ {
 			for row := 0; row < len(points); row++ {
 				if points[row][col] {
-					draw.RectFilled((x+float32(col))*blockWidth, height-(y+float32(row)+1)*blockHeight,
-						blockWidth*(float32(col)+1+x), height-blockHeight*(float32(row)+2+y),
+					draw.RectFilled(x+(boardX+float32(col))*blockWidth, y+height-(boardY+float32(row)+1)*blockHeight,
+						x+blockWidth*(float32(col)+1+boardX), y+height-blockHeight*(float32(row)+2+boardY),
 						r, g, b, a)
 				}
 			}
 		}
 	}
+	// Draw bounding box
+	draw.Line(x, y, x+width, y, 0.8, 0.8, 0.8, 1.0)               // top
+	draw.Line(x, y, x, y+height, 0.8, 0.8, 0.8, 1.0)              // left
+	draw.Line(x+width, y, x+width, y+height, 0.8, 0.8, 0.8, 1.0)  // right
+	draw.Line(x, y+height, x+width, y+height, 0.8, 0.8, 0.8, 1.0) // bottom
 }
 
 func (s *State) BoardIntersects(shape *tetronimoes.Shape) bool {

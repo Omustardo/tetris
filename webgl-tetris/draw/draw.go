@@ -86,3 +86,31 @@ func TriangleFilled(x1, y1, x2, y2, x3, y3, r, g, b, a float32) {
 	gl.DeleteBuffer(triangleVertexPositionBuffer)
 	gl.DisableVertexAttribArray(VertexPositionAttrib)
 }
+
+func Line(x1, y1, x2, y2, r, g, b, a float32) {
+	vbuffer := gl.CreateBuffer()
+	gl.BindBuffer(gl.ARRAY_BUFFER, vbuffer)
+	vertices := f32.Bytes(binary.LittleEndian,
+		x1, y1, 0,
+		x2, y2, 0,
+	)
+	gl.BufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+
+	gl.EnableVertexAttribArray(VertexPositionAttrib) // https://www.opengl.org/sdk/docs/man2/xhtml/glEnableVertexAttribArray.xml
+	itemSize := 3                                    // we use vertices made up of 3 floats
+	gl.VertexAttribPointer(VertexPositionAttrib, itemSize, gl.FLOAT, false, 0, 0)
+
+	pMatrix := mgl32.Ortho2D(0, float32(WindowSize[0]), float32(WindowSize[1]), 0)
+	mvMatrix := mgl32.Translate3D(0, 0, 0) // Rectangle coordinates are being provided as world coords... TODO: have a basic shape and just translate it.
+	// rotMatrix := mgl32.HomogRotate2D(angle) TODO: combine this with perspective and transform matrices in vertex shader
+
+	gl.Uniform4f(ColorUniform, r, g, b, a)            // set color
+	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:])   // set perspective
+	gl.UniformMatrix4fv(MVMatrixUniform, mvMatrix[:]) // set world transform (translate to position)
+	itemCount := 2                                    // 2 points
+	gl.DrawArrays(gl.LINES, 0, itemCount)
+
+	// gl.BindBuffer(gl.ARRAY_BUFFER, gl.Buffer{Value: 0}) // Unbind buffer
+	gl.DeleteBuffer(vbuffer)
+	gl.DisableVertexAttribArray(VertexPositionAttrib)
+}

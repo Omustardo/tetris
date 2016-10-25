@@ -52,7 +52,7 @@ func main() {
 	}
 	defer glfw.Terminate()
 	glfw.WindowHint(glfw.Samples, 8) // Anti-aliasing.
-	glfw.WindowHint(glfw.Resizable, gl.FALSE)
+	// glfw.WindowHint(glfw.Resizable, gl.FALSE)
 
 	window, err := glfw.CreateWindow(*windowWidth, *windowHeight, "Tetris", nil, nil)
 	if err != nil {
@@ -129,7 +129,21 @@ func main() {
 
 		// Draw
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-		state.Draw(0, 0)
+
+		// Expect a 1:2 width:height ratio. If it's different, adjust the draw area.
+		width := float32(draw.WindowSize[0])
+		height := float32(draw.WindowSize[1])
+		switch {
+		case height > width*2:
+			// Window is too tall: draw board filling the width and at the top of the window.
+			state.Draw(0, 0, width, width*2)
+		case height < width*2:
+			// Window is too wide: draw board in the center & filling full height
+			newWidth := height / 2
+			state.Draw((width-newWidth)/2, 0, height/2, height)
+		default:
+			state.Draw(0, 0, width, height)
+		}
 
 		window.SwapBuffers()
 		glfw.PollEvents()
