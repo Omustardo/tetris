@@ -26,11 +26,10 @@ const (
 	framerate    = time.Second / 60
 	vertexSource = `//#version 120 // OpenGL 2.1.
 //#version 100 // WebGL.
-attribute vec3 aVertexPosition;
-uniform mat4 uMVMatrix; // model-view
+attribute vec2 aVertexPosition;
 uniform mat4 uPMatrix; // projection
 void main() {
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+	gl_Position = uPMatrix * vec4(aVertexPosition, 0, 1.0);
 }
 `
 	fragmentSource = `//#version 120 // OpenGL 2.1.
@@ -52,14 +51,13 @@ func main() {
 	}
 	defer glfw.Terminate()
 	glfw.WindowHint(glfw.Samples, 8) // Anti-aliasing.
-	// glfw.WindowHint(glfw.Resizable, gl.FALSE)
 
+	// Note when running on WebGL, the actual width and height parameters are ignored in
+	// favor of the browser window dimensions.
 	window, err := glfw.CreateWindow(*windowWidth, *windowHeight, "Tetris", nil, nil)
 	if err != nil {
 		panic(err)
 	}
-	// glfw.CreateWindow ignores input size for WebGL/HTML canvas so set it here.
-	window.SetSize(*windowWidth, *windowHeight)
 
 	window.MakeContextCurrent()
 	fmt.Printf("OpenGL: %s %s %s; %v samples.\n", gl.GetString(gl.VENDOR), gl.GetString(gl.RENDERER), gl.GetString(gl.VERSION), gl.GetInteger(gl.SAMPLES))
