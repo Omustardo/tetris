@@ -9,9 +9,9 @@ import (
 
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"github.com/omustardo/tetris/glfw-tetris/gamestate"
-	"github.com/omustardo/window"
-	"github.com/omustardo/window/draw"
-	"github.com/omustardo/window/keyboard"
+	"github.com/omustardo/tetris/glfw-tetris/window"
+	"github.com/omustardo/tetris/glfw-tetris/window/draw"
+	"github.com/omustardo/tetris/glfw-tetris/window/keyboard"
 )
 
 const (

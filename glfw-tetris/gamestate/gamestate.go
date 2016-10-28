@@ -16,8 +16,8 @@ import (
 	"time"
 
 	"github.com/omustardo/tetris/glfw-tetris/tetronimoes"
-	"github.com/omustardo/window/draw"
-	"github.com/omustardo/window/keyboard"
+	"github.com/omustardo/tetris/glfw-tetris/window/draw"
+	"github.com/omustardo/tetris/glfw-tetris/window/keyboard"
 )
 
 func init() {
