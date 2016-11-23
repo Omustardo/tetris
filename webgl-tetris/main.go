@@ -1,7 +1,5 @@
 package main
 
-// TODO: Improve logging: https://www.goinggo.net/2013/11/using-log-package-in-go.html
-
 import (
 	"flag"
 	"fmt"
@@ -96,10 +94,7 @@ func main() {
 	// Get gl "names" of Uniform variables in the shader program.
 	// https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml
 	draw.PMatrixUniform = gl.GetUniformLocation(program, "uPMatrix")
-	draw.MVMatrixUniform = gl.GetUniformLocation(program, "uMVMatrix")
-	draw.MVMatrixUniform = gl.GetUniformLocation(program, "uMVMatrix")
 	draw.ColorUniform = gl.GetUniformLocation(program, "uColor")
-	draw.VertexPositionUniform = gl.GetUniformLocation(program, "aVertexPosition")
 	draw.VertexPositionAttrib = gl.GetAttribLocation(program, "aVertexPosition")
 
 	if err := gl.GetError(); err != 0 {

@@ -9,10 +9,8 @@ import (
 )
 
 var (
-	VertexPositionUniform gl.Uniform
-	PMatrixUniform        gl.Uniform
-	MVMatrixUniform       gl.Uniform
-	ColorUniform          gl.Uniform
+	PMatrixUniform gl.Uniform
+	ColorUniform   gl.Uniform
 
 	VertexPositionAttrib gl.Attrib
 
@@ -21,8 +19,8 @@ var (
 
 func RectFilled(x1, y1, x2, y2, r, g, b, a float32) {
 	pMatrix := mgl32.Ortho2D(0, float32(WindowSize[0]), float32(WindowSize[1]), 0)
-	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:])   // perspective
-	gl.Uniform4f(ColorUniform, r, g, b, a) // color
+	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:]) // perspective
+	gl.Uniform4f(ColorUniform, r, g, b, a)          // color
 
 	// NOTE: Be careful of using len(vertices). It's NOT an array of floats - it's an array of bytes.
 	vertices := f32.Bytes(binary.LittleEndian,
@@ -35,7 +33,8 @@ func RectFilled(x1, y1, x2, y2, r, g, b, a float32) {
 		x2, y1,
 		x2, y2,
 	)
-
+	// Note, creating and deleting this buffer every frame for every rectangle is incredibly inefficient.
+	// It's fine for this specific use case since tetris doesn't require many rectangles.
 	vbuffer := gl.CreateBuffer()                             // Generate buffer and returns a reference to it. https://www.khronos.org/opengles/sdk/docs/man/xhtml/glGenBuffers.xml
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbuffer)                  // Bind the target buffer so we can store values in it. https://www.opengl.org/sdk/docs/man4/html/glBindBuffer.xhtml
 	gl.BufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW) // store values in buffer
@@ -47,11 +46,8 @@ func RectFilled(x1, y1, x2, y2, r, g, b, a float32) {
 	itemCount := 6 // itemSize is number of points
 	gl.DrawArrays(gl.TRIANGLES, 0, itemCount)
 
-	gl.DisableVertexAttribArray(VertexPositionAttrib)
-
-	// TODO: Unsure if these are needed.
 	gl.DeleteBuffer(vbuffer)
-	// gl.BindBuffer(gl.ARRAY_BUFFER, gl.Buffer{Value: 0}) //Unbind buffer
+	gl.DisableVertexAttribArray(VertexPositionAttrib)
 }
 
 func Line(x1, y1, x2, y2, r, g, b, a float32) {
@@ -69,13 +65,11 @@ func Line(x1, y1, x2, y2, r, g, b, a float32) {
 
 	pMatrix := mgl32.Ortho2D(0, float32(WindowSize[0]), float32(WindowSize[1]), 0)
 
-	gl.Uniform4f(ColorUniform, r, g, b, a)            // set color
-	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:])   // set perspective
-	itemCount := 2                                    // 2 points
+	gl.Uniform4f(ColorUniform, r, g, b, a)          // set color
+	gl.UniformMatrix4fv(PMatrixUniform, pMatrix[:]) // set perspective
+	itemCount := 2                                  // 2 points
 	gl.DrawArrays(gl.LINES, 0, itemCount)
 
-	// TODO: Unsure if these are needed.
-	// gl.BindBuffer(gl.ARRAY_BUFFER, gl.Buffer{Value: 0}) // Unbind buffer
 	gl.DeleteBuffer(vbuffer)
 	gl.DisableVertexAttribArray(VertexPositionAttrib)
 }

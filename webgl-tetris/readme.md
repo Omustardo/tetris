@@ -5,6 +5,8 @@ any endgame conditions or tracking of score, but the gameplay works.
 
 To run on desktop:
 
+`go get github.com/omustardo/tetris/webgl-tetris`
+
 `go run main.go`
 
 To run in browser:

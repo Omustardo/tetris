@@ -15,9 +15,9 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/omustardo/tetris/glfw-tetris/tetronimoes"
 	"github.com/omustardo/tetris/webgl-tetris/draw"
 	"github.com/omustardo/tetris/webgl-tetris/keyboard"
+	"github.com/omustardo/tetris/webgl-tetris/tetronimoes"
 )
 
 func init() {
@@ -36,7 +36,7 @@ type block struct {
 
 type State struct {
 	fallingPiece *tetronimoes.Shape
-	board        [][]*block // board is logically thought of with [0,0] in the bottom left of the screen
+	board        [][]*block // board has [0,0] in the bottom left of the screen
 }
 
 func NewState() *State {
@@ -90,14 +90,6 @@ func (s *State) ApplyInputs(keyboardHandler *keyboard.Handler) {
 func filled(row []*block) bool {
 	for i := 0; i < len(row); i++ {
 		if row[i] == nil {
-			return false
-		}
-	}
-	return true
-}
-func empty(row []*block) bool {
-	for i := 0; i < len(row); i++ {
-		if row[i] != nil {
 			return false
 		}
 	}
